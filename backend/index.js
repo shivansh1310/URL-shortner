@@ -3,6 +3,7 @@ import connectToMongoDB from "./connect.js";
 import urlRoute from "./routes/url.js";
 import URL from "./models/url.js"
 import "dotenv/config";
+import cors from "cors"
 
 const app = express();
 const PORT = process.env.PORT || 8001;
@@ -12,6 +13,7 @@ connectToMongoDB(url).then(
     () => console.log("MongoDB connected")
 )
 
+app.use(cors())
 app.use(express.json());
 
 app.use("/url", urlRoute)
@@ -29,6 +31,11 @@ app.get("/:shortId", async (req,res) => {
             }
         }
     );
+
+    if (!entry) {
+        return res.status(404).json({ error: "Short URL not found" });
+    }
+
     res.redirect(entry.redirectURL);    
 });     
 
