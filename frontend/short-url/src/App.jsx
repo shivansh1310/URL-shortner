@@ -5,6 +5,8 @@ function App() {
   const [url, setUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [error, setError] = useState("");
+  const API_URL = import.meta.env.VITE_API_URL || "https://localhost:8001";
+
 
   async function handleSumbit(event) {
     event.preventDefault();
@@ -13,7 +15,7 @@ function App() {
     setShortUrl("");
 
     try {
-      const response = await fetch("http://localhost:8001/url", {
+      const response = await fetch(`${API_URL}/url`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -28,7 +30,7 @@ function App() {
         return;
       }
 
-      setShortUrl(`http://localhost:8001/${data.id}`);
+      setShortUrl(`${API_URL}/${data.id}`);
       setUrl("");
     } catch {
       setError("Could not connect to server");
@@ -52,7 +54,7 @@ function App() {
               required
             />
 
-            <button type="sumbit">Shorten URL</button>
+            <button type="submit">Shorten URL</button>
           </form>
 
           {shortUrl && (
